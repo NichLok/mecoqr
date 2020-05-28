@@ -109,7 +109,6 @@ def decode_qr_loading():
 def dispense(time): #input timing
     '''send pill info as string to arduino at specific timing'''
     pill = schedules[time]
-    ser.write(pill.encode())
     print('send {} at {}'.format(pill, time))
 
 
@@ -126,7 +125,6 @@ def create_schedule_all():
 
 
 def dispense_demo(pill, time):
-    ser.write(pill.encode())
     print ('demo send {} at {}'.format(pill, time))
 
 

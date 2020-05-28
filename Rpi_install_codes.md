@@ -1,2 +1,5 @@
 sudo apt-get install python3-imutils
-sudo apt install fswebcam
+
+
+Not needed
+sudo apt install fswebcam (using pygame instead)
