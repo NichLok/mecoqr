@@ -39,7 +39,7 @@ def update_med_freq_list_excel(excel_name, sheet_name):
     '''update med_freq from excel file'''
     med_freq_dic = {}
 
-    wb = xlrd.open_workbook(excel_name)
+    wb = xlrd.open_workbook(excel_name) 
     sheet = wb.sheet_by_name(sheet_name)
     sheet.cell_value(0,0)
 
@@ -70,7 +70,7 @@ def read_qr_loading(compartment): #input float(compartment number)
     done = False
     while not done:
         try:
-            camera = PiCamera()
+            camera = PiCamera() #take picture
             camera.start_preview()
             camera.zoom = (0.3, 0.2, 0.7, 0.7) #need to calibrate
             sleep(2)
@@ -79,7 +79,7 @@ def read_qr_loading(compartment): #input float(compartment number)
             camera.close()
             image = 'pill{}.jpg'.format(str(compartment))
 
-            data = decode(Image.open(image))
+            data = decode(Image.open(image)) #qr code decoding
             data_str = data[0][0].decode('utf-8')
             compartments[compartment] = data_str
             print(compartments)
@@ -91,7 +91,7 @@ def read_qr_loading(compartment): #input float(compartment number)
 
 def decode_qr_loading():
     '''organise saved compartments into schedules -- timing and pills'''
-    for key in compartments:
+    for key in compartments: #key is timing, value is pills
         if compartments[key] != 'NIL':
             each_med_data = compartments[key].split()
             med_code = each_med_data[0]
@@ -112,7 +112,7 @@ def dispense(time): #input timing
     print('send {} at {}'.format(pill, time))
 
 
-def run_threaded(job_func, time):
+def run_threaded(job_func, time): #pip install threaded
     job_thread = threading.Thread(target=job_func, args=time)
     job_thread.start()
 
