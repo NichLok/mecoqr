@@ -15,7 +15,7 @@ pygame.camera.init()
 cam = pygame.camera.Camera("/dev/video0",(width,height))
 cam.start()
 
-#setup window
+#setup window (can be taken out if no display needed)
 windowSurfaceObj = pygame.display.set_mode((width,height),1,16)
 pygame.display.set_caption('Camera')
 
@@ -23,7 +23,7 @@ pygame.display.set_caption('Camera')
 image = cam.get_image()
 cam.stop()
 
-#display the picture
+#display the picture (can be taken out if no display needed)
 catSurfaceObj = image
 windowSurfaceObj.blit(catSurfaceObj,(0,0))
 pygame.display.update()
