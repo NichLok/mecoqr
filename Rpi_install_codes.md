@@ -1,6 +1,7 @@
 sudo pip3 install imutils
 pip3 install pyzbar (for QR code decoder)
 pip3 install xlrd (for excel reading)
+sudo apt install mariadb-server (for mySQL)
 
 For OpenCV on Rpi 3
 sudo apt-get install libhdf5-dev libhdf5-serial-dev libhdf5-100

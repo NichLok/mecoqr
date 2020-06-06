@@ -55,5 +55,6 @@ def decode_qr_loading():
     print(med_code)
     print(qty)
 
+
 read_qr_loading(1.0)
 decode_qr_loading()
