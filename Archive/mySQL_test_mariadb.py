@@ -1,4 +1,3 @@
-import sys
 import mariadb
 
 def mysqldb_select(table, info, condition=None):
