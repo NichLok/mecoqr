@@ -23,8 +23,9 @@ med_name = med_list[1]
 print(iterations)
 for i in range(iterations):
     table_id = str(i+1)
-    nextUnix_index= (i*2) + 2 #finds nextUnix value position
+    nextUnix_index= (i*2) + 2 #finds nextUnix value position in med_list
     nextUnix = med_list[nextUnix_index] #finds nextUnix value 
-    timeRange_index = (i*2) + 3 #finds timeRange value position
+    timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
     timeRange = med_list[timeRange_index] #finds timeRange value
-    print(table_id, user_id, med_name, currentUnix, nextUnix, timeRange)
+    values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
+    print(table,values)

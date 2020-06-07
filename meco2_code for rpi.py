@@ -47,24 +47,13 @@ def read_qr_loading(compartment): #input float(compartment number)
             data = decode(Image.open(image)) 
             data_str = data[0][0].decode('utf-8')
             print(data_str)
-            compartments[compartment] = data_str
+            compartments[compartment] = data_str #not needed unless multiple compartments
             print(compartments)
             done = True
+            return data_str
         except IndexError:
             print('read_qr_error_{}'.format(compartment))
             
-def decode_qr_loading():
-    '''organise saved compartments into schedules -- timing and pills'''
-    for key in compartments: #key is timing, value is pills
-        if compartments[key] != 'NIL':
-            each_med_data = compartments[key].split()
-            med_code = each_med_data[0]
-            
-            qty = each_med_data[1]
-    
-    print(each_med_data)
-    print(med_code)
-    print(qty)
 
 #mysqldb: insert, select, update, delete
 def mysqldb_insert(table, values):
@@ -74,7 +63,7 @@ def mysqldb_insert(table, values):
 
         cnx = mysql.connector.connect(host='178.128.31.63',
                                         database='capstone', 
-                                        user='wendy',
+                                        user='capstone',
                                         password='capstone')
             
         query_insert = """INSERT INTO {} VALUES {}""".format(table, values)
@@ -97,15 +86,22 @@ def mysqldb_insert(table, values):
         print("MySQL Insert Error: ", e)
         cnx.rollback() #undo all data changes from the current transaction
 
-read_qr_loading(1.0)
-decode_qr_loading()
-
-table = 'routines'
-table_id = '3'
-user_id = 'c123'
-med_name = 'med3'
+qr_string = read_qr_loading(1)
+#initialise generic database data
+user_id= 'c123'
 currentUnix = '1590285600'
-nextUnix = '1591419800'
-timeRange = '1'
-values = (table_id, user_id, med_name, currentUnix, nextUnix, timeRange)
-mysqldb_insert(table,values)
+table = 'routines'
+
+med_list = qr_string.split()
+iterations = int(med_list[0])
+med_name = med_list[1]
+
+for i in range(iterations):
+    table_id = str(i+1)
+    nextUnix_index= (i*2) + 2 #finds nextUnix value position in med_list
+    nextUnix = med_list[nextUnix_index] #finds nextUnix value 
+    timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
+    timeRange = med_list[timeRange_index] #finds timeRange value
+    values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
+    print(table,values)
+    mysqldb_insert(table,values)
