@@ -86,22 +86,20 @@ def mysqldb_insert(table, values):
         print("MySQL Insert Error: ", e)
         cnx.rollback() #undo all data changes from the current transaction
 
+def sendQRtoSQL(qr_string,user_id='c123',currentUnix='1590285600',table='routines'):
+    med_list = qr_string.split()
+    iterations = int(med_list[0])
+    med_name = med_list[1]
+
+    for i in range(iterations):
+        table_id = str(i+3)
+        nextUnix_index= (i*2) + 2 #finds nextUnix value position in med_list
+        nextUnix = med_list[nextUnix_index] #finds nextUnix value 
+        timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
+        timeRange = med_list[timeRange_index] #finds timeRange value
+        values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
+        print(table,values)
+        mysqldb_insert(table,values)
+
 qr_string = read_qr_loading(1)
-#initialise generic database data
-user_id= 'c123'
-currentUnix = '1590285600'
-table = 'routines'
-
-med_list = qr_string.split()
-iterations = int(med_list[0])
-med_name = med_list[1]
-
-for i in range(iterations):
-    table_id = str(i+1)
-    nextUnix_index= (i*2) + 2 #finds nextUnix value position in med_list
-    nextUnix = med_list[nextUnix_index] #finds nextUnix value 
-    timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
-    timeRange = med_list[timeRange_index] #finds timeRange value
-    values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
-    print(table,values)
-    mysqldb_insert(table,values)
+sendQRtoSQL(qr_string)
