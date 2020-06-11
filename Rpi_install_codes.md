@@ -10,6 +10,12 @@ sudo apt-get install libatlas-base-dev
 sudo apt-get install libjasper-dev
 sudo pip3 install opencv-contrib-python==4.1.0.25
 
+For Screenapp
+sudo su;
+wget -O - https://raw.githubusercontent.com/audstanley/NodeJs-Raspberry-Pi/master/Install-Node.sh | bash;
+exit;
+node -v;
+npm install react-scripts --save
 
 Not needed
 sudo apt install fswebcam (using pygame instead)
