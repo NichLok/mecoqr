@@ -6,6 +6,8 @@ import pygame
 from pygame.locals import *
 import pygame.camera
 from pyzbar.pyzbar import decode
+#import mySQL function
+from mysqlrpi import *
 
 
 # !!!! dk if needed
@@ -46,20 +48,23 @@ def read_qr_loading(compartment): #input float(compartment number)
             
 
 
-def sendQRtoSQL(qr_string,user_id='c123',currentUnix='1590285600',table='routines'):
+def sendQRtoSQL(qr_string ,table_id =1, user_id='c123',currentUnix='1590285600',table='routines'):
     med_list = qr_string.split()
     iterations = int(med_list[0])
     med_name = med_list[1]
-
+    end_table_id = iterations + table_id
     for i in range(iterations):
-        table_id = str(i+3)
-        nextUnix_index= (i*2) + 2 #finds nextUnix value position in med_list
+        table_id = str(i+table_id)
+        nextUnix_index= (i*3) + 2 #finds nextUnix value position in med_list
         nextUnix = med_list[nextUnix_index] #finds nextUnix value 
-        timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
+        timeRange_index = (i*3) + 3 #finds timeRange value position in med_list
         timeRange = med_list[timeRange_index] #finds timeRange value
-        values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
-        #print(table,values)
+        quantity_index = (i*3) + 4 #finds quantity value position in med_list
+        quantity = med_list[quantity_index] #finds quantity value
+        values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange, quantity
+        print(table,values)
         mysqldb_insert(table,values)
+    return end_table_id
         
         
         
