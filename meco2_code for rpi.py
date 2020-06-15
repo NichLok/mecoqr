@@ -97,7 +97,9 @@ def sendQRtoSQL(qr_string,user_id='c123',currentUnix='1590285600',table='routine
         nextUnix = med_list[nextUnix_index] #finds nextUnix value 
         timeRange_index = (i*2) + 3 #finds timeRange value position in med_list
         timeRange = med_list[timeRange_index] #finds timeRange value
-        values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange
+        quantity_index = (i*2) + 4 #finds quantity value position in med_list
+        quantity = med_list[quantity_index] #finds quantity value
+        values = table_id, user_id, med_name, currentUnix, nextUnix, timeRange, quantity
         print(table,values)
         mysqldb_insert(table,values)
 
