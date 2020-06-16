@@ -1,6 +1,9 @@
 # mecoqr
 QR code reader for rpi
 
+## Capstone Rpi Integrate
+Code to integrate rpi features
+
 ## Archive
 Previous project materials
 

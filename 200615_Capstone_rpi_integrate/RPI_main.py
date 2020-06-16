@@ -40,21 +40,21 @@ state = 'loading'
 
 
 
-def load():
+def load(no_of_compartments=6):
     '''perform QR code reading when loading button is pressed'''
     #read qr and store info into mysql.routines
-    no_of_compartments = 6
     end_table_id = 1 #initialise table_id
     for i in range(no_of_compartments):
         compartment_number = i+1
         table_id = end_table_id
+        #gets rail to go to desired compartment number
         goto = 'goto {}'.format(str(compartment_number))
         sleep(1)
         ser.write(goto.encode())
         print('send ' + goto)
         #checks if camera has reached destination
         while True:
-            x = ser.readline()
+            x = ser.readline() #ser.readline().decode('utf-8') #to read what Arduino sent
             print(x)
             reach = x == b'reached\r\n'
             print('reached: ' + str(reach))
@@ -62,11 +62,11 @@ def load():
                 break
         print('reached {}'.format(str(compartment_number)))
 
+        #reads QR code
         qr_string = read_qr_loading(compartment_number)
+        #uploads QR code to database
         end_table_id = sendQRtoSQL(qr_string,table_id)
 
-    #repeat 'goto x', refer 30.007 code?
-#     ser.readline().decode('utf-8') #to read what Arduino sent
     pass
 
 
