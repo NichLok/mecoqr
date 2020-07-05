@@ -2,7 +2,7 @@
 QR code reader for rpi
 
 ## Capstone Rpi Integrate
-Code to integrate rpi features
+Code to integrate rpi features for MECO Project
 
 ## Archive
 Previous project materials
@@ -11,13 +11,13 @@ Previous project materials
 Simple tests to ensure dependencies and harware work
 
 ## meco2_code for rpi.py
-Actual working code for project on the rpi
+Legacy working code for project on the rpi (Look at qr_to_sql_algo_demo for latest ver)
 
-## meco2_qr_pics_v1.docx
-Printable QR code images for rpi. First QR code is the appropriate one.
+## meco2_qr_pics_v2.docx
+Printable QR code images for rpi.
 
-## qr_to_sql_algo.py
-Main algo to decode qr code data appropriately into mySQL. Already included in main code.
+## qr_to_sql_algo_demo.py
+Main algo to decode qr code data appropriately into mySQL. Sole code needed to demonstrate code's capabilities.
 
 ## rpi_install_codes.py
 Commands to install on rpi4 terminal
