@@ -84,23 +84,25 @@ def mysqldb_insert(table, values):
         print("MySQL Insert Error: ", e)
         cnx.rollback() #undo all data changes from the current transaction
 
-def sendQRtoSQL(qr_string,compartment_number, user_id='c123',currentUnix='1590285600',table='routines (user_id, med_name, currentUnix, nextUnix, timeRange, quantity, compartment, total_quantity)'):
+def sendQRtoSQL(qr_string,compartment_number, user_id='c123',currentUnix='1590285600',table='routines (user_id, day, med_name, currentUnix, nextUnix, timeRange, quantity, compartment, total_quantity)'):
     med_list = qr_string.split()
     iterations = int(med_list[0])
     med_name = med_list[1]
     total_quantity = med_list[2]
-
-    for i in range(iterations):
-        #table_id = str(i+3)
-        nextUnix_index= (i*3) + 3 #finds nextUnix value position in med_list
-        nextUnix = med_list[nextUnix_index] #finds nextUnix value 
+    for i in range(iterations): #to iterate the timings in a day
         timeRange_index = (i*3) + 4 #finds timeRange value position in med_list
         timeRange = med_list[timeRange_index] #finds timeRange value
-        quantity_index = (i*3) + 5 #finds quantity value position in med_list
-        quantity = med_list[quantity_index] #finds quantity value
-        values = user_id, med_name, currentUnix, nextUnix, timeRange, quantity, compartment_number, total_quantity
-        print(table,values)
-        mysqldb_insert(table,values)
+        if timeRange == 1:
+            day_value = 7
+        for j in range(day_value): #to iterate 7 times for a daily dosage
+            day = j + 1 #indicates day, starting with day = 1
+            nextUnix_index= (i*3) + 3 #finds nextUnix value position in med_list
+            nextUnix = med_list[nextUnix_index] #finds nextUnix value 
+            quantity_index = (i*3) + 5 #finds quantity value position in med_list
+            quantity = med_list[quantity_index] #finds quantity value
+            values = user_id, day, med_name, currentUnix, nextUnix, quantity, compartment_number, total_quantity
+            print(table,values)
+            mysqldb_insert(table,values)
 
 
 compartment_number = 1 #Will be set automatically in real thing
