@@ -28,33 +28,40 @@ def read_qr_loading(compartment): #input float(compartment number)
     height = 480
 
     done = False
+    error_no = 0 #initalise counting of errors
     while not done:
-        try:
-            #initialise pygame   
-            pygame.init()
-            pygame.camera.init()
-            cam = pygame.camera.Camera("/dev/video0",(width,height))
-            cam.start()
-            #take a picture
-            init_image = cam.get_image()
-            cam.stop()
-            #save picture
-            pygame.image.save(init_image,'/home/pi/Desktop/pill{}.jpg'.format(str(compartment)))
-            image = 'pill{}.jpg'.format(str(compartment))
-            #pygame.image.save(init_image,'/home/pi/Desktop/Capstone_rpi_integrate/local_image/qr_scan/pill{}.jpg'.format(str(compartment)))
-            #image = '/home/pi/Desktop/Capstone_rpi_integrate/local_image/qr_scan/pill{}.jpg'.format(str(compartment))
+        if error_no <10:
+            try:
+                #initialise pygame   
+                pygame.init()
+                pygame.camera.init()
+                cam = pygame.camera.Camera("/dev/video0",(width,height))
+                cam.start()
+                #take a picture
+                init_image = cam.get_image()
+                cam.stop()
+                #save picture
+                pygame.image.save(init_image,'/home/pi/Desktop/pill{}.jpg'.format(str(compartment)))
+                image = 'pill{}.jpg'.format(str(compartment))
+                #pygame.image.save(init_image,'/home/pi/Desktop/Capstone_rpi_integrate/local_image/qr_scan/pill{}.jpg'.format(str(compartment)))
+                #image = '/home/pi/Desktop/Capstone_rpi_integrate/local_image/qr_scan/pill{}.jpg'.format(str(compartment))
+                
+                #qr code decoding
+                data = decode(Image.open(image)) 
+                data_str = data[0][0].decode('utf-8')
+                #print(data_str)
+                #compartments[compartment] = data_str #not needed unless multiple compartments
+                #print(compartments)
+                done = True
+                return data_str
             
-            #qr code decoding
-            data = decode(Image.open(image)) 
-            data_str = data[0][0].decode('utf-8')
-            #print(data_str)
-            #compartments[compartment] = data_str #not needed unless multiple compartments
-            #print(compartments)
+            except IndexError:
+                error_no += 1
+                print('read_qr_error_{}, try number {}'.format(compartment, error_no))
+        else:
+            data_str = "skip"
             done = True
             return data_str
-        
-        except IndexError:
-            print('read_qr_error_{}'.format(compartment))
             
 def mysqldb_insert(table, values):
     """table: str(table_name)
@@ -108,5 +115,6 @@ def sendQRtoSQL(qr_string,compartment_number, user_id='c123',currentUnix='159028
 compartment_number = 1 #Will be set automatically in real thing
 #reads QR code
 qr_string = read_qr_loading(compartment_number)
-#uploads QR code to database
-sendQRtoSQL(qr_string,compartment_number)
+if qr_string != "skip":
+    #uploads QR code to database
+    sendQRtoSQL(qr_string,compartment_number)
